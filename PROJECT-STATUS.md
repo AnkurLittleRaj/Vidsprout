@@ -16,7 +16,7 @@ This is a documentation-only reference. It is not displayed in the app and does 
 | Authentication and private library | Better Auth/MongoDB and ownership checks implemented; real database integration and two-account isolation tests still pending |
 | Cloud rendering/storage/workflows | R2, Sandbox and Inngest integration code prepared; no successful live end-to-end cloud render verified |
 | Database-backed local worker | Scaffolded, not integration-tested; database/Docker setup deferred at the user's request |
-| General AI video creation | Topic-to-script, uploaded narration/alignment, automatic content selection and general duration selection remain pending |
+| Local lesson creator | Four-step prepared-topic/custom-notes flow, serial local rendering, free-tier George narration and timestamp-based duration implemented; arbitrary-topic writing and uploaded narration remain pending |
 | Social publishing | YouTube/Instagram connections, publishing and scheduling remain pending |
 | Production readiness | Recovery, deletion/retention, operational hardening and deployment remain pending |
 
@@ -154,12 +154,22 @@ Entries VS-001 through VS-010 are a retrospective summary of work from this conv
 - **Verification:** Started with a clean working tree and fetched the remote before branch creation. Documentation and staged secret checks are performed before pushing this change to `dev`.
 - **Limits:** No release merge performed. GitHub branch protection/required-review enforcement is not configured by these documentation rules.
 
+### VS-015 — Local lesson creation from topic or notes
+
+- **Date:** 2026-10-22
+- **Status:** Implemented and locally rendered; V1 remains incomplete.
+- **Change:** Added a four-step creator, three prepared science lessons, bounded custom notes, male/silent narration, vertical/landscape, final playback/download and a browser-scoped local library. No post-generation editor. Removed misleading local-mode account controls and cloud-library counts.
+- **Backend:** Filesystem jobs and serial Remotion worker; same-origin admission, idempotent submissions, one active job and 20 retained jobs per browser. Free-tier quota preflight, cached speech and no automatic narration retry. Scene timing follows returned speech timestamps; duration capped at 90 seconds. Endpoints disabled in production/Vercel.
+- **Files:** Local lesson API/lib/components, lesson composition, worker script, tests, layout/styles, package scripts, README, PRD and architecture implementation notes.
+- **Verification:** All 13 unit tests passed; TypeScript and production build passed; Remotion bundle succeeded. UI generated a 27.43-second narrated vertical photosynthesis MP4; API generated a 28.8-second silent landscape gravity MP4. Worker verified dimensions, duration and narration audio track. Live API checks passed for cross-browser/missing-cookie denial, byte ranges, invalid ranges, foreign origins, malformed JSON and idempotent replay. Candidate secret scan had zero findings. In-app browser crashed on attempted playback, so audible playback verification is incomplete.
+- **Limits:** Local browser scoping is not production authentication. No arbitrary-topic AI writer configured. MongoDB/cloud integration, uploaded narration and social publishing remain deferred. Worker crash recovery may require operator removal of a verified stale lock; no delete UI or production queue is claimed.
+
 ## Template for the next entry
 
-Next available ID: **VS-015**. Replace the placeholders, then advance this pointer.
+Next available ID: **VS-016**. Replace the placeholders, then advance this pointer.
 
 ```markdown
-### VS-015 — Short change title
+### VS-016 — Short change title
 
 - **Date:** YYYY-MM-DD
 - **Status:** Implemented / Locally verified / Scaffolded / Documented / Deferred

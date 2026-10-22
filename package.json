@@ -6,6 +6,7 @@
     "dev": "next dev",
     "setup:check": "node scripts/check-setup.mjs",
     "worker:local": "tsx --env-file=.env.local scripts/local-worker.ts",
+    "worker:lessons": "tsx --env-file=.env.local scripts/lesson-worker.ts",
     "render:preview": "node scripts/render-preview.mjs",
     "narrate:evaporation": "node scripts/narrate-evaporation.mjs",
     "build": "next build",

@@ -724,3 +724,10 @@ An attractive dashboard without functioning generation is not done. Download-onl
 Added a plain-language Definition of Done, user-facing and technical completion checklists, a final demonstration, and explicit exclusions. No implementation is claimed and no new paid services are authorized. Revision 6 is the current revision.
 
 This document defines the proposed V1 requirements for review. It does not claim that integrations have been built, that platform approvals have been obtained, or that the proposed service targets have already been achieved.
+
+
+## VS-015 implementation note — 2026-10-22
+
+Local validation now provides a four-step lesson creator: prepared science topic or bounded lesson notes, voice/format, generation, and final playback/download. A serial filesystem worker runs Remotion locally; no MongoDB or Docker is required. ElevenLabs George narration uses verified free-tier quota and returned speech timestamps, with cached responses and no automatic synthesis retry. Vertical is default; landscape is optional; duration is derived from speech or reading length and bounded to 90 seconds. The output has no editor.
+
+This is a development-only path, disabled in production/Vercel. Browser-cookie scoping is not Better Auth account isolation. The production architecture and account requirements remain unchanged. Arbitrary-topic AI writing, uploaded voice, production authentication/storage, and social publishing/scheduling are still pending. See README for local limits and recovery instructions; do not interpret this milestone as completion of V1.

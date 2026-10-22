@@ -22,9 +22,29 @@ Foundation prototype for the [V1 PRD](./PRD-V1.md). This repository now contains
 
 ## Not implemented yet
 
-Gemini script generation, ElevenLabs voiceover, WhisperX uploads/alignment, AI-decided duration, full content templates, social connections/publishing/calendar, password recovery, project deletion/retention, and production operational hardening. The 12-second test is deliberately fixed and silent; it does not prove narration synchronization.
+Arbitrary-topic AI script generation, uploaded narration/alignment, social connections/publishing/calendar, password recovery, project deletion/retention, and production operational hardening remain pending. Local lesson generation and ElevenLabs timing are implemented below; the cloud job scaffold still renders the fixed silent test.
 
 Do not publicly launch this prototype. Provider integrations must be exercised with your authorized credentials and appropriate plan eligibility. No services are provisioned by installation or the build.
+
+## Local lesson creation (VS-015)
+
+The dashboard supports four steps: topic/notes, voice and format, generation, then watch/download. Prepared evaporation, photosynthesis and gravity lessons work immediately. Custom lessons accept 3–5 lines (one scene per line), at most 240 characters per line, 1,200 characters and 140 words overall. Notes are spoken as supplied; no arbitrary-topic AI writer is configured. Videos cannot be edited after generation.
+
+Set LOCAL_PREVIEW=true in ignored .env.local. For narration, set ELEVENLABS_API_KEY locally. Run these once, then keep both the dev server and worker running in separate terminals:
+
+```sh
+pnpm render:bundle
+pnpm exec remotion browser ensure
+pnpm dev --hostname 127.0.0.1
+# Separate terminal:
+pnpm worker:lessons
+```
+
+Open http://localhost:3000. This needs no MongoDB, Docker, R2, Inngest or Sandbox. Rebuild the render bundle after composition changes. George narration checks that the account is on the free tier and has sufficient remaining credits before making one request. Existing speech responses are cached; uncertain requests are never automatically repeated. Silent mode makes no speech API request. Actual returned speech timestamps control scene boundaries and duration; silent timing uses reading length. Outputs over 90 seconds are rejected.
+
+Files are saved under ignored .local-media/lessons. An HttpOnly browser cookie scopes the local library; it is a local capability, **not production account authentication**. Clearing it disconnects access. Local endpoints reject remote hosts and are disabled in production/Vercel. Each browser can retain up to 20 jobs and submit one active job at a time; the worker renders serially. No deletion UI is included. Failed jobs count toward the limit. Media streaming supports byte ranges and verifies the browser owner. Downloads include attribution for narrated output.
+
+After a forced process termination, first verify no lesson worker is running before removing its stale .local-media/lessons/worker.lock; restart the worker. Interrupted narration/rendering becomes failed, without automatic speech retries. A stale per-browser admission.lock may likewise require operator cleanup after verifying no request is running. Do not remove cached narration request markers without reviewing the provider outcome. These controls are POC safeguards, not a production durable queue.
 
 ## Local setup
 

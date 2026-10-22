@@ -344,3 +344,10 @@ Checked 22 October 2026. Pin versions during implementation and recheck terms be
 ## 16. Recommended next action
 
 Execute the narrow prototype plan before implementing the complete dashboard. The first decisive result is a real topic-to-video job, rendered in Sandbox, saved privately to R2, and retrieved by its owner—with measured synchronization and resource use. Then validate uploaded narration and scheduling. No deployment, credentials, purchases, or live posting have been performed as part of this architecture task.
+
+
+## VS-015 implementation note — 2026-10-22
+
+Local validation now provides a four-step lesson creator: prepared science topic or bounded lesson notes, voice/format, generation, and final playback/download. A serial filesystem worker runs Remotion locally; no MongoDB or Docker is required. ElevenLabs George narration uses verified free-tier quota and returned speech timestamps, with cached responses and no automatic synthesis retry. Vertical is default; landscape is optional; duration is derived from speech or reading length and bounded to 90 seconds. The output has no editor.
+
+This is a development-only path, disabled in production/Vercel. Browser-cookie scoping is not Better Auth account isolation. The production architecture and account requirements remain unchanged. Arbitrary-topic AI writing, uploaded voice, production authentication/storage, and social publishing/scheduling are still pending. See README for local limits and recovery instructions; do not interpret this milestone as completion of V1.
