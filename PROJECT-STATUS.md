@@ -129,19 +129,28 @@ Entries VS-001 through VS-010 are a retrospective summary of work from this conv
 ### VS-012 — Public repository preparation and commit workflow
 
 - **Date:** 2026-10-22
-- **Status:** Prepared locally; remote URL and push pending.
+- **Status:** Published to the public repository.
 - Added the user's standing instruction to commit and push completed code changes to the verified VidSprout repository, with documentation updates and secret review.
 - Extended ignored files and added a public-file scanner that checks candidate/staged content against local credentials and common credential patterns without displaying secrets.
 - **Files:** `AGENTS.md`, `.gitignore`, `scripts/check-public-files.mjs`, this history.
 - **Verification:** Candidate and staged scans reviewed 51 files with zero findings; ignored environment/media/build paths confirmed. No application behavior changed.
-- **Limits:** A scanner supplements manual review; it is not a guarantee against every possible secret format. The remote owner must be confirmed before publishing.
+- **Limits:** A scanner supplements manual review; it is not a guarantee against every possible secret format. The remote owner was confirmed as AnkurLittleRaj.
+
+### VS-013 — Initial GitHub publication
+
+- **Date:** 2026-10-22
+- **Status:** Published.
+- Pushed initial commit f331987 to main in https://github.com/AnkurLittleRaj/Vidsprout. GitHub confirmed the branch was created.
+- Credentials, local narration/media, dependencies, and build outputs were excluded. The tracked environment example contains empty credential fields.
+- **Verification:** Candidate and staged secret scans passed before the initial commit; remote push succeeded. Existing Markdown hard-line-break whitespace was preserved intentionally.
+- **Files:** This history and the repository remote configuration.
 
 ## Template for the next entry
 
-Next available ID: **VS-013**. Replace the placeholders, then advance this pointer.
+Next available ID: **VS-014**. Replace the placeholders, then advance this pointer.
 
 ```markdown
-### VS-013 — Short change title
+### VS-014 — Short change title
 
 - **Date:** YYYY-MM-DD
 - **Status:** Implemented / Locally verified / Scaffolded / Documented / Deferred
