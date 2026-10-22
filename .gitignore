@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.env*
+!.env.example
+render-bundle/
+out/
+*.tsbuildinfo
+.vercel/
+test-results/
+.pnpm-store/
+.local-media/
+.local-tools/
+*.log
+*.pem
+*.key

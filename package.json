@@ -1,0 +1,42 @@
+{
+  "name": "vidsprout",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "setup:check": "node scripts/check-setup.mjs",
+    "worker:local": "tsx --env-file=.env.local scripts/local-worker.ts",
+    "render:preview": "node scripts/render-preview.mjs",
+    "narrate:evaporation": "node scripts/narrate-evaporation.mjs",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "render:bundle": "remotion bundle src/remotion/index.ts --out-dir render-bundle",
+    "db:indexes": "tsx --env-file=.env.local scripts/indexes.ts"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "better-auth": "1.7.12",
+    "mongodb": "7.7.0",
+    "inngest": "4.25.0",
+    "@aws-sdk/client-s3": "3.1154.0",
+    "@aws-sdk/s3-request-presigner": "3.1154.0",
+    "@vercel/sandbox": "3.8.0",
+    "@remotion/vercel": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "remotion": "4.0.537",
+    "zod": "4.5.4",
+    "lucide-react": "1.61.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "tsx": "4.23.15",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@remotion/cli": "4.0.537"
+  }
+}

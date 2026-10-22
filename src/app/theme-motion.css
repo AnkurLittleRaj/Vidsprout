@@ -1,0 +1,62 @@
+:root { color-scheme:light; }
+html { scroll-behavior:smooth; }
+.topbar-actions { display:flex;align-items:center;gap:20px; }
+.theme-toggle { display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-size:12px; }
+body,.sidebar,.hero-card,.preview-section,.modal,.empty-state,.topbar { transition:background-color .25s ease,color .25s ease,border-color .25s ease; }
+button,a.primary { transition:transform .16s ease,background-color .2s ease,color .2s ease,box-shadow .2s ease; }
+button:active:not(:disabled),a.primary:active { transform:scale(.96); }
+.primary svg,.theme-toggle svg { transition:transform .2s ease; }
+@media(hover:hover) {
+  .primary:hover:not(:disabled) { transform:translateY(-2px); }
+  .primary:hover:not(:disabled) svg { transform:translateX(2px); }
+  .theme-toggle:hover svg { transform:rotate(-15deg); }
+  .circle-button:hover,.play-button:hover { transform:scale(1.07); }
+  .job-card:hover { box-shadow:0 10px 28px #00000012;transform:translateY(-3px); }
+}
+.job-card { transition:transform .2s ease,box-shadow .2s ease; }
+.page-heading,.hero-card,.preview-section,.library,.notice { animation:content-enter .4s ease both; }
+.hero-card { animation-delay:60ms; }.preview-section { animation-delay:100ms; }
+.modal-backdrop { animation:backdrop-enter .18s ease both; }
+.modal { animation:dialog-enter .22s ease both; }
+@keyframes content-enter { from { opacity:0;translate:0 8px; } to { opacity:1;translate:0 0; } }
+@keyframes backdrop-enter { from {opacity:0} to {opacity:1} }
+@keyframes dialog-enter { from {opacity:0;transform:translateY(10px) scale(.98)} to {opacity:1;transform:translateY(0) scale(1)} }
+
+html[data-theme='dark'] { color-scheme:dark;--ink:#f5f5f7;--muted:#a1a1a6;--paper:#101012;--line:#333338;--soft:#202024;--surface:#202024;--green:#0071e3; }
+[data-theme='dark'] body { background:#101012;color:#f5f5f7; }
+[data-theme='dark'] .sidebar { background:#17171a;border-color:#303034; }
+[data-theme='dark'] .brand-symbol { background:#f5f5f7;color:#1d1d1f; }
+[data-theme='dark'] :is(.brand-ai,.workspace-label,.workspace-label span,.nav-item,.private-note,.private-note p,.profile small,.topbar,.prototype-tag,.eyebrow,.page-heading p,.hero-content p,.hero-footnote,.art-label,.preview-section p,.fine-print,.workflow-strip small,.footer,.job-info p,.modal>p,.modal label small) { color:#a1a1a6; }
+[data-theme='dark'] :is(.topbar strong,.private-note strong,.profile strong,.empty-state h3) { color:#f5f5f7; }
+[data-theme='dark'] h1 span { color:#a1a1a6; }
+[data-theme='dark'] :is(.hero-card,.preview-section,.empty-state,.modal,.job-card) { background:#202024;border-color:#333338; }
+[data-theme='dark'] .nav-item:hover { background:#27272c; }
+[data-theme='dark'] .nav-item.selected { background:#173352;color:#8dc4ff; }
+[data-theme='dark'] .nav-count { background:#264766;color:#c5e1ff; }
+[data-theme='dark'] :is(.login-button,.pill,.section-heading button,.switch-auth) { color:#78b7ff; }
+[data-theme='dark'] .orientation-switch { background:#34343a; }
+[data-theme='dark'] .orientation-switch button { color:#c8c8ce; }
+[data-theme='dark'] .orientation-switch button.active { background:#53535b;color:#fff; }
+[data-theme='dark'] .theme-toggle { border-color:#414147; }
+[data-theme='dark'] .theme-toggle:hover { background:#303036; }
+[data-theme='dark'] .workflow-strip>div>span { background:#29292e;color:#c8c8ce; }
+[data-theme='dark'] .empty-state p { color:#a1a1a6; }
+[data-theme='dark'] :is(.empty-icon,.avatar,.job-art) { background:#29313b;color:#a6c9ed; }
+[data-theme='dark'] .circle-button { background:#29292e;border-color:#45454c;color:#78b7ff; }
+[data-theme='dark'] .job-state { color:#c8c8ce; }
+[data-theme='dark'] .play-button { background:#34343a;color:#fff; }
+[data-theme='dark'] .notice { background:#182b40;border-color:#2f4b68; }
+[data-theme='dark'] .modal input { background:#151518;border-color:#505058;color:#f5f5f7; }
+[data-theme='dark'] .form-warning { background:#393020;color:#ecd5a5; }
+[data-theme='dark'] .error-text { color:#ffaaa1!important; }
+[data-theme='dark'] .orbit { border-color:#34343b; }
+[data-theme='dark'] .art-note { background:#293648;border-color:#3b4e65;color:#adc6e6; }
+[data-theme='dark'] .note-strokes i { background:#465a74; }
+[data-theme='dark'] .video-paper { background:#f5f5f7;border-color:#43434b;box-shadow:0 20px 40px #00000035; }
+[data-theme='dark'] .preview-section video { box-shadow:0 20px 40px #00000040; }
+@media(max-width:760px) { .topbar-actions {gap:12px}.topbar-actions .prototype-tag {display:none}.theme-toggle {min-height:40px} }
+@media(prefers-reduced-motion:reduce) {
+  html {scroll-behavior:auto!important}
+  *,*::before,*::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  button:active:not(:disabled),a.primary:active,.primary:hover:not(:disabled),.primary:hover:not(:disabled) svg,.theme-toggle:hover svg,.circle-button:hover,.play-button:hover,.job-card:hover {transform:none!important}
+}
