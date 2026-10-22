@@ -145,12 +145,21 @@ Entries VS-001 through VS-010 are a retrospective summary of work from this conv
 - **Verification:** Candidate and staged secret scans passed before the initial commit; remote push succeeded. Existing Markdown hard-line-break whitespace was preserved intentionally.
 - **Files:** This history and the repository remote configuration.
 
+### VS-014 — Development branch and manual release approval
+
+- **Date:** 2026-10-22
+- **Status:** Workflow documented; development branch created.
+- Created `dev` from `origin/main`. Future work goes to `dev`; `main` remains the release branch. A `dev` to `main` pull request requires explicit manual release approval before merging.
+- **Files:** `AGENTS.md`, `README.md`, this history; Git branch configuration.
+- **Verification:** Started with a clean working tree and fetched the remote before branch creation. Documentation and staged secret checks are performed before pushing this change to `dev`.
+- **Limits:** No release merge performed. GitHub branch protection/required-review enforcement is not configured by these documentation rules.
+
 ## Template for the next entry
 
-Next available ID: **VS-014**. Replace the placeholders, then advance this pointer.
+Next available ID: **VS-015**. Replace the placeholders, then advance this pointer.
 
 ```markdown
-### VS-014 — Short change title
+### VS-015 — Short change title
 
 - **Date:** YYYY-MM-DD
 - **Status:** Implemented / Locally verified / Scaffolded / Documented / Deferred

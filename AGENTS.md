@@ -9,6 +9,11 @@
 
 ## GitHub delivery
 
+- Work on `dev` and push completed changes to `origin/dev`. `main` is the existing release branch (the role sometimes called master); do not rename it or push development changes directly to it.
+- Release changes through a pull request from `dev` into `main`. Never merge, enable auto-merge, or push to `main` without the user's explicit manual approval of that release. Earlier permission to commit/push development work is not approval to merge a release.
+- Before starting work, verify the checked-out branch. Switch to `dev` when clean; preserve uncommitted work when switching is unsafe. Keep development history intact and synchronize `dev` after an approved release.
+- These repository instructions define our workflow; they do not enforce GitHub branch protection. Do not claim required reviews or direct-push restrictions are enabled unless verified in GitHub.
+
 - The user has authorized committing and pushing completed coding changes to their VidSprout GitHub repository. Update `PROJECT-STATUS.md`, run relevant checks, review the diff and staged secret scan, then commit and push in the same work session.
 - Use the verified remote configured for this repository; never guess an owner from a display name. If the remote or authentication is missing, finish the local reviewable work and report the blocker.
 - The repository is public. Never commit real environment files, API keys, tokens, local media, local tools, dependency directories, or generated build output. `.env.example` must contain placeholders only for credentials.

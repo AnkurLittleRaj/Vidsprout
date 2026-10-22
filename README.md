@@ -4,6 +4,10 @@
 
 For the current implementation status and numbered change history, see [Project status](./PROJECT-STATUS.md). Future project changes must update that document alongside the work, as described in `AGENTS.md`.
 
+## Development and releases
+
+Daily work is committed and pushed to `dev`. The existing `main` branch is the release branch. Review a pull request from `dev` to `main` and obtain the owner's explicit manual approval before merging. Development push authorization does not authorize a release merge. GitHub branch protection is separate and has not been configured by this workflow change.
+
 Foundation prototype for the [V1 PRD](./PRD-V1.md). This repository now contains a Next.js application, not just planning documents. It is **not a completed V1**.
 
 ## Implemented in this milestone
