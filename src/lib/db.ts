@@ -1,9 +1,11 @@
 import { MongoClient } from 'mongodb';
 import { required } from './config';
 import type { RenderJob } from './domain';
+import { configureLocalDns } from './local-dns';
 
 const globalDb = globalThis as unknown as {mongoClient?: MongoClient};
 export function client() {
+  if (!globalDb.mongoClient) configureLocalDns();
   return globalDb.mongoClient ??= new MongoClient(required('MONGODB_URI'), {maxPoolSize: 10, serverSelectionTimeoutMS: 5000});
 }
 export function db() { return client().db(process.env.MONGODB_DB || 'vidsprout'); }

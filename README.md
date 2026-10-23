@@ -158,3 +158,16 @@ An external call cannot be made transactional with MongoDB. If submission is unc
 - `tests` — domain and boundary checks.
 
 Architecture: [SYSTEM-ARCHITECTURE-V1.md](./SYSTEM-ARCHITECTURE-V1.md). Requirements: [PRD-V1.md](./PRD-V1.md). Neither document's Definition of Done is marked complete by this milestone.
+
+
+## Account-backed local lessons (VS-017)
+
+Set LOCAL_ACCOUNT_AUTH=true together with LOCAL_PREVIEW=true in ignored .env.local, with MONGODB_URI, MONGODB_DB=vidsprout, BETTER_AUTH_SECRET and BETTER_AUTH_URL=http://localhost:3000 configured. Run pnpm db:indexes, restart pnpm dev --hostname 127.0.0.1, and keep pnpm worker:lessons running. Open localhost:3000 consistently with the auth origin.
+
+When enabled, signup/login uses Better Auth and MongoDB. Lesson creation, listing, playback and downloads require a valid session and derive a stable filesystem namespace from the server-verified account ID. Browser cookies cannot select an owner. Signing out revokes access; signing in again restores the same library. Existing anonymous demo videos are preserved separately and are not automatically adopted by any account. Files and job metadata still live on this computer; cloud media storage and publishing remain pending.
+
+If local Atlas SRV lookups fail with querySrv ECONNREFUSED, LOCAL_DNS_SERVERS=1.1.1.1,8.8.8.8 enables an optional DNS override for Node resolve calls in the backend process. This sends those DNS queries to the configured resolvers, including MongoDB discovery records. It does not modify OS settings; it is ignored in production and on Vercel. Restart the server after changing it. No fallback to anonymous access occurs when account mode is enabled but MongoDB is unavailable.
+
+Use an Atlas database user with readWrite on vidsprout and allow only the development machine's current public IP. An IP change may require updating Atlas's access list. The configured cluster is the Free tier; no paid cluster upgrades or add-ons are needed for these local tests.
+
+The explicit integration check, node --env-file=.env.local scripts/check-account-flow.mjs, creates two QA accounts and one silent local video. It tests owner access, cross-account denial, old demo-cookie denial, logout revocation, and fresh-login library recovery. QA records are retained for review; random test passwords remain in memory only. No narration credits are consumed.

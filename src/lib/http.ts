@@ -11,6 +11,7 @@ export function mutationOrigin(request: Request) {
 }
 export function errorResponse(error: unknown) {
   if (error instanceof HttpError) return Response.json({error: error.message}, {status: error.status});
-  console.error('Request failed', error instanceof Error ? error.name : 'UnknownError');
+  console.error('Request failed', error instanceof Error ? error.name : 'UnknownError',
+    error && typeof error === 'object' && 'code' in error ? String(error.code) : 'no-code');
   return Response.json({error: 'This service is unavailable. Please try again later.'}, {status: 503});
 }

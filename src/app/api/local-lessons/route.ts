@@ -1,17 +1,18 @@
-import { randomUUID } from 'node:crypto';
+import { lessonOwner, lessonResponse as localResponse } from '@/lib/lesson-access';
+import { errorResponse } from '@/lib/http';
 import { readFile, mkdir, open, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { buildLesson, lessonInput } from '@/lib/lesson-plan';
 import { lessonRoot, listLessons, publicLesson, readLesson, saveLesson } from '@/lib/local-lessons';
-import { browserOwner, localRequest, localResponse } from '@/lib/local-lesson-http';
+import { localRequest } from '@/lib/local-lesson-http';
 export const runtime='nodejs';
 export async function GET(request:Request) {
-  try {localRequest(request);const owner=browserOwner(request)||randomUUID();return localResponse({jobs:await listLessons(owner)},owner);}
-  catch {return Response.json({error:'Local preview unavailable.'},{status:404});}
+  try {localRequest(request);const owner=(await lessonOwner(request,true))!;return localResponse({jobs:await listLessons(owner)},owner);}
+  catch(e) {return errorResponse(e);}
 }
 export async function POST(request:Request) {
   try {localRequest(request,true);}catch{return Response.json({error:'Request not allowed.'},{status:403});}
-  const owner=browserOwner(request);
+  let owner;try {owner=await lessonOwner(request);}catch(e){return errorResponse(e);}
   if(!owner)return Response.json({error:'Refresh this page before creating a video.'},{status:409});
   let admission:Awaited<ReturnType<typeof open>>|undefined;
   const admissionPath=path.join(lessonRoot,owner,'admission.lock');

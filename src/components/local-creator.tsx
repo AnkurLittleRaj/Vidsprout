@@ -4,16 +4,16 @@ import { ArrowLeft, ArrowRight, Check, Download, Film, LoaderCircle, Play } from
 
 type LocalJob={id:string;title:string;orientation:string;narration:string;source:string;state:string;duration?:number;error?:string};
 const labels:Record<string,string>={queued:'Waiting to start',narrating:'Creating the narration',rendering:'Animating your lesson',ready:'Ready to watch',failed:'Could not finish'};
-export function LocalCreator({libraryOnly=false}:{libraryOnly?:boolean}) {
+export function LocalCreator({libraryOnly=false,accountMode=false}:{libraryOnly?:boolean;accountMode?:boolean}) {
   const [step,setStep]=useState(1);const [topic,setTopic]=useState('evaporation');const [title,setTitle]=useState('');const [notes,setNotes]=useState('');
   const [orientation,setOrientation]=useState('vertical');const [narration,setNarration]=useState('male');
   const [jobs,setJobs]=useState<LocalJob[]>([]);const [selected,setSelected]=useState<string|null>(null);const [error,setError]=useState('');const [busy,setBusy]=useState(false);const [connected,setConnected]=useState(false);
   const key=useRef<string|null>(null);
   const refresh=useCallback(async()=>{
-    const response=await fetch('/api/local-lessons',{cache:'no-store'});if(!response.ok)throw new Error('Could not load your local videos.');
+    const response=await fetch('/api/local-lessons',{cache:'no-store'});if(response.status===401){setJobs([]);setSelected(null);setConnected(false);throw new Error('Please sign in again.');}if(!response.ok)throw new Error('Could not load your local videos.');
     const data=await response.json();setJobs(data.jobs);setConnected(true);
   },[]);
-  useEffect(()=>{let active=true;const poll=async()=>{try{if(active)await refresh();}catch{if(active)setError('Connection interrupted. Your saved videos will reappear when the connection returns.');}};void poll();const timer=setInterval(poll,3000);return()=>{active=false;clearInterval(timer);};},[refresh]);
+  useEffect(()=>{let active=true;const poll=async()=>{try{if(active)await refresh();}catch(e){if(active)setError((e as Error).message);}};void poll();const timer=setInterval(poll,3000);return()=>{active=false;clearInterval(timer);};},[refresh]);
   const current=jobs.find(j=>j.id===selected);const running=jobs.find(j=>!['ready','failed'].includes(j.state));
   useEffect(()=>{if(!selected&&running){setSelected(running.id);setStep(3);}if(current?.state==='ready')setStep(4);},[current?.state,running?.id,selected]);
   function next(){if(topic==='custom'&&(!title.trim()||notes.split(/\r?\n/).filter(s=>s.trim()).length<3)){setError('Add a title and at least three short lines of notes.');return;}setError('');setStep(2);key.current=null;}
@@ -35,7 +35,7 @@ export function LocalCreator({libraryOnly=false}:{libraryOnly?:boolean}) {
     {(step===3||step===4)&&current&&<div className="creator-result"><h3>{current.title}</h3>{current.state==='ready'?<><video key={current.id} controls playsInline preload="metadata" aria-label="Generated lesson video" src={`/api/local-lessons/${current.id}/video`}/><p>{current.duration?.toFixed(1)} seconds · {current.orientation} · {current.narration==='male'?'Male narration · elevenlabs.io':'Silent video'}</p><div className="creator-actions"><a className="primary" href={`/api/local-lessons/${current.id}/video?download=1`}><Download size={16}/> Download video</a><button className="creator-link" onClick={reset}>Create another</button></div></>:current.state==='failed'?<><p role="alert">{current.error}</p><button className="creator-link" onClick={reset}>Back to topics</button></>:<div role="status" className="render-status"><LoaderCircle className="busy-icon" size={25}/><strong>{labels[current.state]}</strong><p>You can leave this view and return. Your local worker will continue.</p></div>}</div>}
     </>}
     {error&&<p className="error-text" role="alert">{error}</p>}
-    <div className="section-heading"><h2>{libraryOnly?'Your local videos':'Recent local videos'}</h2></div><p className="fine-print">Saved on this computer and scoped to this browser. Clearing browser cookies disconnects this local library. Account-backed storage comes later.</p>
+    <div className="section-heading"><h2>{libraryOnly?'Your local videos':'Recent local videos'}</h2></div><p className="fine-print">{accountMode?'Your videos belong to your account. Files are stored on this computer for now; sign in again to access them.':'Saved on this computer and scoped to this browser. Clearing browser cookies disconnects this local library. Account-backed storage comes later.'}</p>
     {jobs.length?<div className="local-video-grid">{jobs.map(job=><article className="local-video-card" key={job.id}><Film size={24}/><h3>{job.title}</h3><p>{job.orientation} · {labels[job.state]}</p>{job.state==='ready'?<details><summary>Watch video</summary><video controls playsInline preload="none" aria-label={`Watch ${job.title}`} src={`/api/local-lessons/${job.id}/video`}/><a className="creator-link" href={`/api/local-lessons/${job.id}/video?download=1`}>Download</a></details>:<p role="status">{job.error||'Your video is being prepared.'}</p>}</article>)}</div>:<p className="fine-print">Your generated videos will appear here.</p>}
   </section>;
 }

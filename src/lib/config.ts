@@ -13,7 +13,7 @@ export function configuration() {
   const workflow = process.env.INNGEST_DEV === '1' || !!(process.env.INNGEST_EVENT_KEY && process.env.INNGEST_SIGNING_KEY);
   const local = localRendering();
   const preview = process.env.LOCAL_PREVIEW === 'true' && process.env.NODE_ENV !== 'production' && !process.env.VERCEL;
-  return {...configured, workflow, local, preview, liveEnabled: process.env.ENABLE_LIVE_RENDER === 'true',
+  return {...configured, workflow, local, preview, accountLessons: preview && process.env.LOCAL_ACCOUNT_AUTH === 'true', liveEnabled: process.env.ENABLE_LIVE_RENDER === 'true',
     renderReady: local ? configured.authentication : Object.values(configured).every(Boolean) && workflow && process.env.ENABLE_LIVE_RENDER === 'true'};
 }
 export function localRendering() {

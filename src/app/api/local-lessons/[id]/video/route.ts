@@ -1,11 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { browserOwner, localRequest } from '@/lib/local-lesson-http';
+import { localRequest } from '@/lib/local-lesson-http';
 import { lessonPath, readLesson, validId } from '@/lib/local-lessons';
+import { lessonOwner } from '@/lib/lesson-access';
 export const runtime='nodejs';
 export async function GET(request:Request,{params}:{params:Promise<{id:string}>}) {
   try {
-    localRequest(request);const owner=browserOwner(request);const {id}=await params;
+    localRequest(request);const owner=await lessonOwner(request);const {id}=await params;
     if(!owner||!validId(id))return new Response(null,{status:404});
     const job=await readLesson(owner,id);if(job?.state!=='ready')return new Response(null,{status:404});
     const data=await readFile(path.join(lessonPath(owner,id),'final.mp4'));

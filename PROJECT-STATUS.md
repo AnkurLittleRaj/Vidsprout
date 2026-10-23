@@ -1,6 +1,6 @@
 # VidSprout.ai — Project status and numbered change history
 
-Last updated: 2026-10-22
+Last updated: 2026-10-23
 
 This is a documentation-only reference. It is not displayed in the app and does not control product behavior. The PRD defines requirements; this file records progress and changes actually made.
 
@@ -13,7 +13,7 @@ This is a documentation-only reference. It is not displayed in the app and does 
 | Dashboard | Home, My Videos, sign-in/sign-up dialogs, responsive styling, light/dark themes and subtle motion implemented |
 | Local video preview | Evaporation explainer with male narration; vertical and landscape playback/download; no database or login required for this fixed sample |
 | Narration | ElevenLabs George voice generated once for the sample; scene transitions use returned speech timestamps; final MP4 duration 27.3 seconds |
-| Authentication and private library | Better Auth/MongoDB and ownership checks implemented; real database integration and two-account isolation tests still pending |
+| Authentication and private library | Better Auth/Atlas connected; local account libraries and live two-account API isolation checks passed (VS-017) |
 | Cloud rendering/storage/workflows | R2, Sandbox and Inngest integration code prepared; no successful live end-to-end cloud render verified |
 | Database-backed local worker | Scaffolded, not integration-tested; database/Docker setup deferred at the user's request |
 | Local lesson creator | Four-step prepared-topic/custom-notes flow, serial local rendering, free-tier George narration and timestamp-based duration implemented; arbitrary-topic writing and uploaded narration remain pending |
@@ -164,12 +164,31 @@ Entries VS-001 through VS-010 are a retrospective summary of work from this conv
 - **Verification:** All 13 unit tests passed; TypeScript and production build passed; Remotion bundle succeeded. UI generated a 27.43-second narrated vertical photosynthesis MP4; API generated a 28.8-second silent landscape gravity MP4. Worker verified dimensions, duration and narration audio track. Live API checks passed for cross-browser/missing-cookie denial, byte ranges, invalid ranges, foreign origins, malformed JSON and idempotent replay. Candidate secret scan had zero findings. In-app browser crashed on attempted playback, so audible playback verification is incomplete.
 - **Limits:** Local browser scoping is not production authentication. No arbitrary-topic AI writer configured. MongoDB/cloud integration, uploaded narration and social publishing remain deferred. Worker crash recovery may require operator removal of a verified stale lock; no delete UI or production queue is claimed.
 
+### VS-016 — Account library integration in progress
+
+- **Date:** 2026-10-22
+- **Status:** In progress; not enabled or live-verified.
+- **Change:** Prepared explicit local account mode using Better Auth sessions for lesson admission, listing and media access; stable server-derived account namespaces preserve access across logins. Existing demo files remain separate. Added account entry points and local library session-expiry handling.
+- **Files:** lesson-access.ts, lesson-identity.ts, local lesson API, workspace/creator components, config/page and environment example.
+- **Verification:** TypeScript passed. MongoDB URI is absent; Atlas provisioning, real signup, two-account isolation tests and delivery remain pending. Existing local demo mode remains enabled.
+- **Blocker:** Atlas sign-in completed. Created a separate VidSprout project and requested vidsprout-dev on the Free ($0/hour) tier in AWS Mumbai; deployment was observed in progress. Prepared readWrite access scoped to the vidsprout database, without submitting a database user. User approved current-IP network access; added a single /32 rule and Atlas confirmed it. Cluster is now ACTIVE on FREE tier, with backups OFF and auto-scaling OFF. Database-user credential form remains unsubmitted; awaiting user credential creation before connection testing. No credentials or IP values recorded.
+
+### VS-017 — Atlas connection and verified account libraries
+
+- **Date:** 2026-10-23
+- **Status:** Implemented and locally verified; completes the local account milestone started in VS-016.
+- **Change:** Connected the app to the existing free Atlas cluster. Added optional LOCAL_DNS_SERVERS for local Node resolver calls after the machine's resolver refused Atlas discovery; both callback and promise resolvers are configured before MongoClient initialization. MongoDB uses native Node loading in Next.js. Production/Vercel ignores the override; OS network settings are unchanged.
+- **Accounts:** Enabled local account mode; Better Auth sessions control lesson creation, listing, playback and download. Stable server-derived namespaces restore the library across logins. Expired-session responses clear local library data; session refresh also runs on window focus. Legacy demo files are preserved separately, with no automatic migration. MongoDB stores authentication records; render jobs/media still live locally.
+- **Verification:** 15 unit tests passed. Production build passed after fixing the new DNS test's environment type. Created database indexes including unique user email. Verified the connected database user has readWrite on vidsprout and no broad database role. Live integration check created two QA accounts and a silent MP4; verified unauthenticated/legacy-cookie denial, creation/idempotency, cross-account list and media/download denial, owner streaming/download, logout revocation, and library recovery with a fresh login. Browser verified the account-gated dashboard and enabled signup form; signup/login themselves were tested through real HTTP endpoints. No narration credits used.
+- **Files:** Account access/identity helpers, local DNS and database initialization, local lesson routes, workspace/creator, next.config.ts, .env.example, integration script and tests; README, PRD and architecture. Secrets and local media remain ignored.
+- **Limits:** This is local development, not a production deployment. QA records remain for inspection; credentials existed only in test memory. Cloud media storage, password recovery, automatic demo migration and social publishing are pending. Free-tier configuration was retained; no paid upgrade/add-on enabled. A network IP change may require Atlas access-list maintenance.
+
 ## Template for the next entry
 
-Next available ID: **VS-016**. Replace the placeholders, then advance this pointer.
+Next available ID: **VS-018**. Replace the placeholders, then advance this pointer.
 
 ```markdown
-### VS-016 — Short change title
+### VS-018 — Short change title
 
 - **Date:** YYYY-MM-DD
 - **Status:** Implemented / Locally verified / Scaffolded / Documented / Deferred
