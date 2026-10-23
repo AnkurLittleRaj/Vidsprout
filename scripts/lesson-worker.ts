@@ -2,7 +2,7 @@ import { mkdir, open, readFile, readdir, rename, unlink, writeFile } from 'node:
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { getVideoMetadata, makeCancelSignal, renderMedia, selectComposition } from '@remotion/renderer';
-import { lessonPath, lessonRoot, readLesson, saveLesson, validId, type LocalLesson } from '../src/lib/local-lessons';
+import { lessonPath, lessonRoot, readLesson, recoverInterruptedLesson, saveLesson, validId, type LocalLesson } from '../src/lib/local-lessons';
 import { silentTimeline, speechTimeline } from '../src/lib/lesson-plan';
 
 const voice='JBFqnCBsd6RMkjVDRZzb'; // George, premade male voice verified for this POC.
@@ -60,7 +60,7 @@ async function main() {
   console.log('Local lesson worker ready. No database or cloud rendering required.');
   try {
     // Never automatically retry jobs interrupted after speech submission.
-    for(const owner of (await readdir(lessonRoot)).filter(validId))for(const id of (await readdir(path.join(lessonRoot,owner))).filter(validId)){const j=await readLesson(owner,id);if(j&&['narrating','rendering'].includes(j.state)){j.state='failed';j.error='The local render was interrupted. No automatic retry was made.';await saveLesson(j);}}
+    for(const owner of (await readdir(lessonRoot)).filter(validId))for(const id of (await readdir(path.join(lessonRoot,owner))).filter(validId)){const j=await readLesson(owner,id);if(j)await recoverInterruptedLesson(j);}
     while(!stop){let worked=false;
       for(const owner of (await readdir(lessonRoot)).filter(validId))for(const id of (await readdir(path.join(lessonRoot,owner))).filter(validId)){
         const job=await readLesson(owner,id);if(job?.state==='queued'){worked=true;await render(job);if(stop)break;}

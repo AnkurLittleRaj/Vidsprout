@@ -13,7 +13,7 @@ const lessons:Record<string,LessonPlan>={
     {title:'Where did the puddle go?',text:'Liquid water can turn into an invisible gas called water vapor. This is evaporation.',symbol:'water'},
     {title:'Molecules keep moving',text:'Water molecules are always moving. Energy from the surroundings can help them escape.',symbol:'energy'},
     {title:'Escape at the surface',text:'Some faster moving molecules escape from the surface of the liquid and enter the air as water vapor.',symbol:'vapor'},
-    {title:'No boiling needed',text:'Warmth, moving air, and drier air generally help water evaporate faster. Evaporation does not require boiling.',symbol:'sun'},
+    {title:'No boiling needed',text:'Warmth, moving air, and drier air generally help water evaporate faster. Evaporation does not require boiling.',symbol:'evaporation-heat'},
   ]},
   photosynthesis:{title:'How photosynthesis works',source:'prepared',scenes:[
     {title:'Plants make their own food',text:'Plants use energy from sunlight to make sugars. This process is called photosynthesis.',symbol:'plant'},

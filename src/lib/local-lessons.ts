@@ -20,8 +20,13 @@ export async function readLesson(owner:string,id:string):Promise<LocalLesson|nul
   try{return JSON.parse(await readFile(file,'utf8'));}catch(e){if((e as NodeJS.ErrnoException).code==='ENOENT')return null;throw e;}
 }
 export function publicLesson(job:LocalLesson) {
-  const stale=!['ready','failed'].includes(job.state)&&Date.now()-Date.parse(job.createdAt)>15*60_000;
-  return {id:job.id,title:job.plan.title,orientation:job.input.orientation,narration:job.input.narration,source:job.plan.source,state:stale?'failed':job.state,createdAt:job.createdAt,duration:job.duration,error:stale?'This render was interrupted. Please restart the local worker before trying again.':job.error};
+  // Queue age is not evidence of failure; only the worker persists terminal states.
+  return {id:job.id,title:job.plan.title,orientation:job.input.orientation,narration:job.input.narration,source:job.plan.source,state:job.state,createdAt:job.createdAt,duration:job.duration,error:job.error};
+}
+// Only call at startup under the exclusive worker lock, before processing jobs.
+export async function recoverInterruptedLesson(job:LocalLesson) {
+  if(job.state!=='narrating'&&job.state!=='rendering')return;
+  await saveLesson({...job,state:'failed',updatedAt:new Date().toISOString(),error:'The local render was interrupted. No automatic retry was made.'});
 }
 export async function listLessons(owner:string) {
   if(!validId(owner))return [];

@@ -183,12 +183,21 @@ Entries VS-001 through VS-010 are a retrospective summary of work from this conv
 - **Files:** Account access/identity helpers, local DNS and database initialization, local lesson routes, workspace/creator, next.config.ts, .env.example, integration script and tests; README, PRD and architecture. Secrets and local media remain ignored.
 - **Limits:** This is local development, not a production deployment. QA records remain for inspection; credentials existed only in test memory. Cloud media storage, password recovery, automatic demo migration and social publishing are pending. Free-tier configuration was retained; no paid upgrade/add-on enabled. A network IP change may require Atlas access-list maintenance.
 
+### VS-018 — Correct local job failures and evaporation illustration
+
+- **Date:** 2026-10-23
+- **Status:** Implemented; regression checks passed.
+- **Change:** Removed the API-only 15-minute failure cutoff introduced in VS-014. Public responses now reflect persisted worker state, so old queued or progressing work still blocks duplicate submissions. Exclusive worker startup recovery persists interrupted narration/rendering as failed and updates its timestamp. Evaporation now uses a distinct heat/water/vapor scene instead of the photosynthesis plant illustration.
+- **Files:** src/lib/local-lessons.ts, scripts/lesson-worker.ts, src/lib/lesson-plan.ts, src/remotion/Lesson.tsx, tests/lesson-plan.test.ts, README.md.
+- **Verification:** All 18 tests and TypeScript checks passed, including persisted restart recovery, old active jobs, and distinct lesson symbols. Public-file scan found no secrets.
+- **Limits:** Recovery still requires a worker restart and safe stale-lock cleanup after a crash. Existing finalized MP4s and previously saved lesson plans are not rewritten. No narration credits or paid services used.
+
 ## Template for the next entry
 
-Next available ID: **VS-018**. Replace the placeholders, then advance this pointer.
+Next available ID: **VS-019**. Replace the placeholders, then advance this pointer.
 
 ```markdown
-### VS-018 — Short change title
+### VS-019 — Short change title
 
 - **Date:** YYYY-MM-DD
 - **Status:** Implemented / Locally verified / Scaffolded / Documented / Deferred

@@ -25,11 +25,15 @@ export function Lesson({plan=sample,sceneStarts=[0],audioSrc}:{plan?:LessonPlan;
           <ellipse cx="250" cy="290" rx="95" ry="9" fill="#36556c"/>
           {[0,1,2].map(i=><circle key={i} cx={365-(frame+i*22)%100} cy={90+(frame+i*22)%100} r="4" fill="#f4d58b" opacity=".7"/>)}
           <text x="250" y="325" fill="#b6c9df" textAnchor="middle" fontSize="18">Light energy supports life</text>
-        </>:['water','vapor','energy'].includes(scene.symbol)?<>
+        </>:['water','vapor','energy','evaporation-heat'].includes(scene.symbol)?<>
+          {scene.symbol==='evaporation-heat'&&<g>
+            <circle cx="385" cy="65" r="28" fill="#f4d58b"/>
+            {[0,1,2].map(i=><path key={i} d={'M'+(350+i*20)+' 105 q-12 15 -7 26 t-7 26'} stroke="#f4d58b" strokeWidth="3" fill="none" opacity={0.55+0.3*Math.sin(frame*.06+i)}/>)}
+          </g>}
           <path d="M90 190 Q170 175 250 190 T410 190 V290 H90Z" fill="#287da6"/><path d="M90 190 Q170 175 250 190 T410 190" stroke="#7de3e4" strokeWidth="3" fill="none"/>
           {Array.from({length:15},(_,i)=><circle key={i} cx={115+i%5*65+Math.sin(frame*.08+i)*8} cy={215+Math.floor(i/5)*25+Math.cos(frame*.07+i)*6} r="6" fill="#b5f1ed"/>)}
           {scene.symbol!=='water'&&[0,1,2,3].map(i=>{const p=((frame+i*30)%120)/120;return <circle key={i} cx={155+i*60} cy={185-p*130} r="5" opacity={Math.sin(p*Math.PI)} fill="#b5f1ed"/>})}
-          <text x="250" y="325" fill="#b6c9df" textAnchor="middle" fontSize="17">Molecules shown schematically</text>
+          <text x="250" y="325" fill="#b6c9df" textAnchor="middle" fontSize="17">{scene.symbol==='evaporation-heat'?'Warmth helps water evaporate':'Molecules shown schematically'}</text>
         </>:<>
           {[0,1,2,3,4].map(i=>{const a=i*Math.PI*2/5+frame*.006;return <g key={i}><line x1="250" y1="175" x2={250+Math.cos(a)*115} y2={175+Math.sin(a)*115} stroke="#4b709b" strokeWidth="2"/><circle cx={250+Math.cos(a)*115} cy={175+Math.sin(a)*115} r="14" fill="#83c7ff"/></g>})}
           <circle cx="250" cy="175" r="48" fill="#3e79c4"/><text x="250" y="188" textAnchor="middle" fill="white" fontSize="38">{index+1}</text>
